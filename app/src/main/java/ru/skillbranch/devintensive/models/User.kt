@@ -1,12 +1,13 @@
 package ru.skillbranch.devintensive.models
 
+import ru.skillbranch.devintensive.utils.Utils
 import java.util.*
 
 /**
  *
  * @author Sergey Susev
  */
-class User(
+data class User(
     val id: String,
     var firstName: String?,
     var lastName: String?,
@@ -34,11 +35,10 @@ class User(
 
     companion object Factory {
         private var lastId: Int = -1
-        fun makeUser(fullName: String?): User { //todo FixMe
+        fun makeUser(fullName: String?): User {
             lastId++
-            val parts: List<String>? = fullName?.split(" ")
-            val firstName = parts?.getOrNull(0)
-            val lastName = parts?.getOrNull(1)
+
+            val (firstName, lastName) = Utils.parseFullName(fullName)
             return User(id = "$lastId", firstName = firstName, lastName = lastName)
         }
     }
