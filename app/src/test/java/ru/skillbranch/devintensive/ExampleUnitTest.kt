@@ -86,4 +86,19 @@ class ExampleUnitTest {
         println(txtMessage.formatMessage())
         println(imgMessage.formatMessage())
     }
+
+    @Test
+    fun test_builder() {
+        val build = User.Builder().id("id")
+            .firstName("Sergey")
+            .lastName("Susev")
+            .avatar("Avatar")
+            .rating(15)
+            .respect(32)
+            .lastVisit(Date())
+            .isOnline(true)
+            .build()
+
+        println(build)
+    }
 }
