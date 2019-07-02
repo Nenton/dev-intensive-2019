@@ -38,27 +38,33 @@ object Utils {
     )
 
     fun parseFullName(fullName: String?): Pair<String?, String?> {
-//        TODO FIX ME
-        val parts: List<String>? = fullName?.split(" ")
+        if (fullName == null || fullName.trim().isEmpty()) return null to null
+        val parts: List<String>? = fullName.trim().split(" ")
         val firstName = parts?.getOrNull(0)
         val lastName = parts?.getOrNull(1)
         return firstName to lastName
     }
 
+    //    module3 FAILED java.lang.AssertionError: expected:<(null, null)> but was:<(, null)> next>>> module7 FAILED org.junit.ComparisonFailure: expected:<[mi mi m]i> but was:<[Mi M]i>
     fun transliteration(payload: String, divider: String = " "): String {
         mapLetter[' '] = divider
-        val parseFullName = parseFullName(payload)
-        var resultFirstName = ""
-        var resultLastName = ""
-        parseFullName.first?.toLowerCase()?.toCharArray()?.forEach { c ->
-            if (mapLetter.containsKey(c)) resultFirstName += mapLetter[c] else resultFirstName += c
+        var resultString = ""
+        payload.toCharArray().forEach { c ->
+            if (mapLetter.containsKey(c)) resultString += mapLetter[c] else {
+                val lowCase = c.toLowerCase()
+                if (mapLetter.containsKey(lowCase)) {
+                    val case = mapLetter[lowCase]!!.replace(
+                        mapLetter[lowCase]?.get(0)!!,
+                        mapLetter[lowCase]?.get(0)?.toUpperCase()!!
+                    )
+                    resultString += case
+                } else {
+                    resultString += c
+                }
+            }
         }
-        parseFullName.second?.toLowerCase()?.toCharArray()?.forEach { c ->
-            if (mapLetter.containsKey(c)) resultLastName += mapLetter[c] else resultLastName += c
-        }
-        resultFirstName = resultFirstName[0].toUpperCase() + resultFirstName.substring(1)
-        resultLastName = resultLastName[0].toUpperCase() + resultLastName.substring(1)
-        return "$resultFirstName$divider$resultLastName"
+
+        return resultString
     }
 
     fun toInitials(firstName: String?, lastName: String?): String? {

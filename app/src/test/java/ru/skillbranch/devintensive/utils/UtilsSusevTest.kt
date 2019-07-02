@@ -22,5 +22,15 @@ class UtilsSusevTest {
     fun transliterationTest() {
         assertThat(Utils.transliteration("Женя Стереотипов"), equalTo("Zhenya Stereotipov"))
         assertThat(Utils.transliteration("Amazing Петр", "_"), equalTo("Amazing_Petr"))
+        assertThat(Utils.transliteration("[ми mi м]и", " "), equalTo("[mi mi m]i"))
+    }
+
+    @Test
+    fun parseFullNameTest() {
+        assertThat(Utils.parseFullName("Sergey Susev"), equalTo(Pair<String?, String?>("Sergey", "Susev")))
+        assertThat(Utils.parseFullName("Sergey"), equalTo(Pair<String?, String?>("Sergey", null)))
+        assertThat(Utils.parseFullName("   "), equalTo(Pair<String?, String?>(null, null)))
+        assertThat(Utils.parseFullName(""), equalTo(Pair<String?, String?>(null, null)))
+        assertThat(Utils.parseFullName(null), equalTo(Pair<String?, String?>(null, null)))
     }
 }
