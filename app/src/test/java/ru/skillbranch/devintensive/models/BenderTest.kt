@@ -28,7 +28,7 @@ class BenderTest {
     fun listenAnswerNegativeTest() {
         val benderObj = Bender()
         var actual = benderObj.listenAnswer("Fry")
-        var expected = Pair("Это неправильный ответ.\nКак меня зовут?", Bender.Status.WARNING.color)
+        var expected = Pair("Это неправильный ответ\nКак меня зовут?", Bender.Status.WARNING.color)
         //Как меня зовут? #NORMAL(Triple(255, 255, 255))
         assertThat(actual.first, equalTo(expected.first))
         assertThat(actual.second, equalTo(expected.second))
@@ -43,7 +43,7 @@ class BenderTest {
         //Как меня зовут? #DANGER(Triple(255, 60, 60))
         benderObj.status = Bender.Status.DANGER
         actual = benderObj.listenAnswer("Fry")
-        expected = Pair("Это неправильный ответ.\nКак меня зовут?", Bender.Status.CRITICAL.color)
+        expected = Pair("Это неправильный ответ\nКак меня зовут?", Bender.Status.CRITICAL.color)
         assertThat(actual.first, equalTo(expected.first))
         assertThat(actual.second, equalTo(expected.second))
     }
