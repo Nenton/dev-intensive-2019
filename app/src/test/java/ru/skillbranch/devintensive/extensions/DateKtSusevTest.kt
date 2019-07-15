@@ -12,7 +12,7 @@ class DateKtSusevTest {
     @Test
     fun humanizeDiffTest() {
 
-        assertThat(Date().add(-1, TimeUnits.SECOND).humanizeDiff(), equalTo("несколько секунд назад"))
+        assertThat(Date().add(-0, TimeUnits.SECOND).humanizeDiff(), equalTo("только что"))
         assertThat(Date().add(-1, TimeUnits.MINUTE).humanizeDiff(), equalTo("минуту назад"))
         assertThat(Date().add(-1, TimeUnits.HOUR).humanizeDiff(), equalTo("час назад"))
         assertThat(Date().add(-1, TimeUnits.DAY).humanizeDiff(), equalTo("день назад"))

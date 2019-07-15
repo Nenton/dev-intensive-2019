@@ -55,7 +55,8 @@ fun Date.humanizeDiff(date: Date = Date()): String {
     diffTime = abs(diffTime)
     val after = if (isAfter) AFTER else ""
     val before = if (!isAfter) BEFORE else ""
-    return when (diffTime) {
+
+    val halfResult = when (diffTime) {
         in 0..SECOND -> "только что"
         in SECOND..45 * SECOND -> "несколько секунд"
 
@@ -83,5 +84,6 @@ fun Date.humanizeDiff(date: Date = Date()): String {
             after + "${diffTime / DAY} $dayLit"
         }
         else -> if (isAfter) "более чем через год" else "более года"
-    } + before
+    }
+    return halfResult + (if (halfResult != "только что") before else "")
 }
