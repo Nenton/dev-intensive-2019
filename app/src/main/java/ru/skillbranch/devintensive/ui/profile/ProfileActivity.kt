@@ -9,23 +9,31 @@ import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_profile.*
 import ru.skillbranch.devintensive.R
+import ru.skillbranch.devintensive.models.Profile
+import ru.skillbranch.devintensive.viewmodels.ProfileViewModel
 
 class ProfileActivity : AppCompatActivity() {
     companion object {
         const val IS_EDIT_MODE = "IS_EDIT_MODE"
     }
 
+    private lateinit var viewModel: ProfileViewModel
     lateinit var viewFields: Map<String, TextView>
     var isEditMode = false
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
+        //TODO set Theme this before super and setContentView
+
+//        setTheme()
+        Log.d("M_ProfileActivity", "onCreate")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
         initViews(savedInstanceState)
-
+        initViewModel()
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
@@ -34,9 +42,39 @@ class ProfileActivity : AppCompatActivity() {
         outState?.putBoolean(IS_EDIT_MODE, isEditMode)
     }
 
+    private fun initViewModel() {
+        viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
+        viewModel.getProfileData().observe(this, Observer { updateUI(it) })
+        viewModel.getTheme().observe(this, Observer { updateTheme(it) })
+    }
+
+    private fun updateTheme(mode: Int) {
+        Log.d("M_ProfileActivity", "updateTheme")
+        delegate.setLocalNightMode(mode)
+    }
+
+    private fun updateUI(profile: Profile) {
+        profile.toMap().also {
+            for ((k, v) in viewFields) {
+                v.text = it[k].toString()
+            }
+        }
+    }
+
+    private fun saveProfileInfo() {
+        Profile(
+            firstName = et_first_name.text.toString(),
+            lastName = et_last_name.text.toString(),
+            about = et_about.text.toString(),
+            repository = et_repository.text.toString()
+        ).apply {
+            viewModel.saveProfileData(this)
+        }
+    }
+
     private fun initViews(savedInstanceState: Bundle?) {
         viewFields = mapOf(
-            "nickname" to tv_nick_name,
+            "nickName" to tv_nick_name,
             "rank" to tv_rank,
             "firstName" to et_first_name,
             "lastName" to et_last_name,
@@ -49,8 +87,13 @@ class ProfileActivity : AppCompatActivity() {
         isEditMode = savedInstanceState?.getBoolean(IS_EDIT_MODE, false) ?: false
 
         btn_edit.setOnClickListener {
+            if (isEditMode) saveProfileInfo()
             isEditMode = isEditMode.not()
             showCurrentMode(isEditMode)
+        }
+
+        btn_switch_theme.setOnClickListener {
+            viewModel.switchTheme()
         }
     }
 
