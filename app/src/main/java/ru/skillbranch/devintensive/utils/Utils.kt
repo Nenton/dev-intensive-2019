@@ -1,6 +1,11 @@
 package ru.skillbranch.devintensive.utils
 
+import org.intellij.lang.annotations.RegExp
+
 object Utils {
+    @RegExp
+    private const val regexpUrl = "(https?://)?(www.)?(github.com)(/(?!enterprise|features|topics|collections|" +
+            "trending|events|marketplace|pricing|nonprofit|customer-stories|security|login|join)\\w+)"
     private var mapLetter = mutableMapOf(
         'а' to "a",
         'б' to "b",
@@ -75,5 +80,12 @@ object Utils {
         if (firstLetter == null) return secondLetter.toString()
         if (secondLetter == null) return firstLetter.toString()
         return "$firstLetter$secondLetter"
+    }
+
+    /**
+     * enterprise features topics collections trending events marketplace pricing nonprofit customer-stories security login join
+     */
+    fun checkUrl(url: String): Boolean {
+        return regexpUrl.toRegex().matches(url)
     }
 }
