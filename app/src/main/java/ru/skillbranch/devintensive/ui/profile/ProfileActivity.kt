@@ -28,7 +28,7 @@ class ProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         //TODO set Theme this before super and setContentView
 
-//        setTheme()
+        setTheme(R.style.AppTheme)
         Log.d("M_ProfileActivity", "onCreate")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
