@@ -1,5 +1,7 @@
 package ru.skillbranch.devintensive.models
 
+import ru.skillbranch.devintensive.utils.Utils
+
 /**
  * @author Sergey Susev
  */
@@ -24,4 +26,12 @@ class Profile(
         "rating" to rating,
         "respect" to respect
     )
+
+//    Реализуй Profile.nickName как вычисляемое свойство из имени и фамилии пользователя,
+//    возвращающее значение псевдонима пользователя в виде транслитерированной строки с заменой пробела на "_"
+//    Пример:
+//    Profile: firsName = "Женя", lastName = "Стереотипов"; Profile.nickName //Zhenya_Stereotipov
+//    (Используй реализованный ранее метод Utils.transliteration)
+
+    fun nickName() = Utils.transliteration("$firstName $lastName", "_")
 }
