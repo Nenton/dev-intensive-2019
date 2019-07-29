@@ -1,5 +1,6 @@
 package ru.skillbranch.devintensive.ui.profile
 
+import android.graphics.Color
 import android.graphics.ColorFilter
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
@@ -123,6 +124,8 @@ class ProfileActivity : AppCompatActivity() {
                 }
             }
         })
+
+        iv_avatar.setImageBitmap(Utils.textAsBitmap(this, "СС", Color.WHITE))
     }
 
     private fun showErrorRepository() {

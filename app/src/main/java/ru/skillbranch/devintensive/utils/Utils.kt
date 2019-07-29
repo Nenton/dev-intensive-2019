@@ -1,6 +1,11 @@
 package ru.skillbranch.devintensive.utils
 
+import android.content.Context
+import android.graphics.*
+import android.graphics.Paint.ANTI_ALIAS_FLAG
+import android.graphics.Paint.Align
 import org.intellij.lang.annotations.RegExp
+
 
 object Utils {
     @RegExp
@@ -87,5 +92,24 @@ object Utils {
      */
     fun checkUrl(url: String): Boolean {
         return regexpUrl.toRegex().matches(url)
+    }
+
+    fun textAsBitmap(context: Context, text: String, textColor: Int): Bitmap {
+        val density = context.resources.displayMetrics.density
+        val paint = Paint(ANTI_ALIAS_FLAG)
+        paint.color = textColor
+        paint.textAlign = Align.LEFT
+        paint.textSize = density * 20
+        val delta = density * 20
+        val size = (paint.measureText(text) + delta).toInt()
+        val image = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(image)
+        val paintCircle = Paint()
+        paintCircle.style = Paint.Style.FILL
+        paintCircle.color = Color.BLUE
+        val rect = RectF(0f, 0f, size.toFloat(), size.toFloat())
+        canvas.drawRect(rect, paintCircle)
+        canvas.drawText(text, delta / 2, paint.textSize + delta / 2, paint)
+        return image
     }
 }
