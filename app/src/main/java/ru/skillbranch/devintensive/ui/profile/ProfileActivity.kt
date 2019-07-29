@@ -4,6 +4,8 @@ import android.graphics.ColorFilter
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.EditText
@@ -14,6 +16,7 @@ import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_profile.*
 import ru.skillbranch.devintensive.R
 import ru.skillbranch.devintensive.models.Profile
+import ru.skillbranch.devintensive.utils.Utils
 import ru.skillbranch.devintensive.viewmodels.ProfileViewModel
 
 class ProfileActivity : AppCompatActivity() {
@@ -24,10 +27,9 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var viewModel: ProfileViewModel
     lateinit var viewFields: Map<String, TextView>
     var isEditMode = false
+    private var isValidRepository = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        //TODO set Theme this before super and setContentView
-
         setTheme(R.style.AppTheme)
         Log.d("M_ProfileActivity", "onCreate")
         super.onCreate(savedInstanceState)
@@ -87,8 +89,15 @@ class ProfileActivity : AppCompatActivity() {
         isEditMode = savedInstanceState?.getBoolean(IS_EDIT_MODE, false) ?: false
 
         btn_edit.setOnClickListener {
-            if (isEditMode) saveProfileInfo()
-            isEditMode = isEditMode.not()
+            if (isEditMode && isValidRepository) {
+                saveProfileInfo()
+                isEditMode = isEditMode.not()
+            } else if (!isEditMode) {
+                isEditMode = isEditMode.not()
+            }
+            if (isValidRepository.not()) {
+                et_repository.text = null
+            }
             showCurrentMode(isEditMode)
         }
 
@@ -96,6 +105,31 @@ class ProfileActivity : AppCompatActivity() {
 
         btn_switch_theme.setOnClickListener {
             viewModel.switchTheme()
+        }
+
+        et_repository.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                // nothing
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // nothing
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (s != null && s.isEmpty().not()) {
+                    isValidRepository = Utils.checkUrl(s.toString())
+                    showErrorRepository()
+                }
+            }
+        })
+    }
+
+    private fun showErrorRepository() {
+        if (!isValidRepository) {
+            et_repository.error = resources.getString(R.string.invalid_repository_url_message)
+        } else {
+            et_repository.error = null
         }
     }
 
