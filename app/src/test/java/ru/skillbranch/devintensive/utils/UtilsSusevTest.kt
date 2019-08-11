@@ -33,4 +33,20 @@ class UtilsSusevTest {
         assertThat(Utils.parseFullName(""), equalTo(Pair<String?, String?>(null, null)))
         assertThat(Utils.parseFullName(null), equalTo(Pair<String?, String?>(null, null)))
     }
+
+    @Test
+    fun checkUrlTest() {
+        assertThat(Utils.checkUrl("https://github.com/johnDoe"), equalTo(true))
+        assertThat(Utils.checkUrl("https://www.github.com/johnDoe"), equalTo(true))
+        assertThat(Utils.checkUrl("www.github.com/johnDoe"), equalTo(true))
+        assertThat(Utils.checkUrl("github.com/johnDoe"), equalTo(true))
+        assertThat(Utils.checkUrl("https://anyDomain.github.com/johnDoe"), equalTo(false))
+        assertThat(Utils.checkUrl("https://github.com/"), equalTo(false))
+        assertThat(Utils.checkUrl("https://github.com"), equalTo(false))
+        assertThat(Utils.checkUrl("https://github.com/johnDoe/tree"), equalTo(false))
+        assertThat(Utils.checkUrl("https://github.com/johnDoe/tree/something"), equalTo(false))
+        assertThat(Utils.checkUrl("https://github.com/enterprise"), equalTo(false))
+        assertThat(Utils.checkUrl("https://github.com/pricing"), equalTo(false))
+        assertThat(Utils.checkUrl("https://github.com/join"), equalTo(false))
+    }
 }
